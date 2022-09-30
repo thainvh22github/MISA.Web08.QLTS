@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Common\MISA.Web08.QLTS.Common.csproj" />
+    <ProjectReference Include="..\MISA.Web08.QLTS.DL\MISA.Web08.QLTS.DL.csproj" />
+  </ItemGroup>
+
+</Project>
