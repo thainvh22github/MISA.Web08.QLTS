@@ -11,35 +11,45 @@ namespace MISA.Web08.QLTS.API.Controllers
     [ApiController]
     public class DepartmentController : Controller
     {
+        #region Field
+        
         private IDepartmentBL _departmentBL;
 
+        #endregion
+
+        #region Contructor
+        
         public DepartmentController(IDepartmentBL departmentBL)
         {
             _departmentBL = departmentBL;
         }
 
+        #endregion
+
+        #region Method
+
         /// <summary>
-        /// API lấy danh sách toàn bộ phòng ban
-        /// </summary>
-        /// <returns>lấy danh sách toàn bộ phòng ban</returns>
+        /// API lấy danh sách phòng ban theo mã phòng ban và tên phòng ban
+        /// <param name="keyword">Mã phòng ban hoặc tên phòng ban</param>
+        /// <returns>Danh sách phòng ban</returns>
         /// Author: NVHThai (16/09/2022)
+        /// </summary>
         [HttpGet]
         [Route("")]
-        public IActionResult GetAllDepartments()
+        public IActionResult GetAllDepartments(string? keyword)
         {
             try
             {
-                var departments = _departmentBL.GetAllDepartments();
-
+                var departments = _departmentBL.GetAllDepartments(keyword);
                 return StatusCode(StatusCodes.Status200OK, departments);
-
-                // Xử lý kết quả trả về từ DB
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
                 return StatusCode(StatusCodes.Status500InternalServerError, "e001");
             }
-        }
+        } 
+
+        #endregion
     }
 }

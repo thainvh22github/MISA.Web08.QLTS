@@ -11,20 +11,44 @@ namespace MISA.Web08.QLTS.DL
 {
     public class DepartmentDL : IDepartmentDL
     {
-        public IEnumerable<Department> GetAllDepartments()
+        #region API Get
+
+        /// <summary>
+        /// Lấy ra danh sách phòng ban lọc theo tên phòng ban và mã phòng ban
+        /// </summary>
+        /// <param name="keword">Tên phòng ban hoặc mã phòng ban cần tìm kiếm</param>
+        /// <returns>Danh sách phòng ban</returns>
+        /// Author: NVHThai (28/09/2022)
+        public IEnumerable<Department> GetAllDepartments(string? keword)
         {
-            // khởi tạo kết nối đến db
+
+            //khởi tạo kết nối db
             string connectionString = "Server=localhost;Port=3306;Database=misa.web08.hcsn.nvhthai;Uid=root;Pwd=thaibqhg12;";
             var mySqlConnection = new MySqlConnection(connectionString);
 
-            //khai báo tên stored procedure
-            string storedProcedure = "Proc_department_GetAll";
+            // Chuẩn bị tên Stored procedure
+            string storedProcedureName = "Proc_department_GetAll";
 
-            // Thực hiện gọi vào db
-            var departments = mySqlConnection.Query<Department>(storedProcedure, commandType: System.Data.CommandType.StoredProcedure);
+            // Chuẩn bị tham số đầu vào cho stored procedure
+            var parameters = new DynamicParameters();
 
-            return departments;
 
-        }
+            string whereConditions = null;
+            if (keword != null)
+            {
+                whereConditions = $"department_name LIKE '%{keword}%' OR department_code LIKE '%{keword}%'";
+            }
+
+            parameters.Add("@$v_Where", whereConditions);
+
+            // Thực hiện gọi vào DB để chạy stored procedure với tham số đầu vào ở trên
+            var department = mySqlConnection.Query<Department>(storedProcedureName, parameters, commandType: System.Data.CommandType.StoredProcedure);
+
+
+            return department;
+
+        } 
+        
+        #endregion
     }
 }

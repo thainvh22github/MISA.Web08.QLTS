@@ -11,25 +11,65 @@ namespace MISA.Web08.QLTS.DL
 {
     public class AssetDL : IAssetDL
     {
-        public int DeleteAsset(Guid assetID)
+        #region API Get
+        
+        /// <summary>
+        /// lấy danh sách toàn bộ nhân viên
+        /// </summary>
+        /// <returns>Lấy danh sách toàn bộ tài sản</returns>
+        /// Author: NVHThai (16/09/2022)
+        public IEnumerable<Assets> GetAllAssets()
         {
             //khởi tạo kết nối db
             string connectionString = "Server=localhost;Port=3306;Database=misa.web08.hcsn.nvhthai;Uid=root;Pwd=thaibqhg12;";
             var mySqlConnection = new MySqlConnection(connectionString);
 
+            //khai báo tên stored procedure
+            string storedProcedure = "Proc_asset_GetAll";
+
+
+            // Thực hiện gọi vào db
+            var assets = mySqlConnection.Query<Assets>(storedProcedure, commandType: System.Data.CommandType.StoredProcedure);
+
+            return assets;
+        }
+
+        /// <summary>
+        /// lấy thông tin 1 tài sản theo id
+        /// </summary>
+        /// <param name="assetID">ID tài sản muốn lấy</param>
+        /// <returns>Thông tin 1 tài sản</returns>
+        /// Author: NVHThai (16/09/2022)
+        public Assets GetAssetByID(Guid assetID)
+        {
+
+            // Khởi tạo kết nối tới DB MySQL
+            string connectionString = "Server=localhost;Port=3306;Database=misa.web08.hcsn.nvhthai;Uid=root;Pwd=thaibqhg12;";
+            var mySqlConnection = new MySqlConnection(connectionString);
+
             // Chuẩn bị tên Stored procedure
-            string storedProcedureName = "Proc_asset_DeleteByID";
+            string storedProcedureName = "Proc_asset_GetByAssetID";
 
             // Chuẩn bị tham số đầu vào cho stored procedure
             var parameters = new DynamicParameters();
             parameters.Add("@$v_AssetID", assetID);
 
             // Thực hiện gọi vào DB để chạy stored procedure với tham số đầu vào ở trên
-            var numberOfAffectedRows = mySqlConnection.Execute(storedProcedureName, parameters, commandType: System.Data.CommandType.StoredProcedure);
+            var asset = mySqlConnection.QueryFirstOrDefault<Assets>(storedProcedureName, parameters, commandType: System.Data.CommandType.StoredProcedure);
 
-            return numberOfAffectedRows;
+            return asset;
         }
 
+        /// <summary>
+        /// Hàm tìm kiếm và phân trang
+        /// </summary>
+        /// <param name="keword">tìm kiếm theo mã tài sản và tên tài sản</param>
+        /// <param name="assetCategoryID">lọc theo id loại tài sản</param>
+        /// <param name="departmentID">lọc theo id phòng ban</param>
+        /// <param name="limit">số trang trong 1 bản ghi</param>
+        /// <param name="offset">số trang</param>
+        /// <returns>Danh sách tài sản</returns>
+        /// Author: NVHThai (16/09/2022)
         public PaggingData<Assets> FilterAssets(string? keword, Guid? assetCategoryID, Guid? departmentID, int limit, int offset)
         {
             //khởi tạo kết nối db
@@ -68,52 +108,28 @@ namespace MISA.Web08.QLTS.DL
 
             var asset = multipleResults.Read<Assets>();
             var totalCount = multipleResults.Read<int>().Single();
+            var quantity = multipleResults.Read<int>().Single();
+            var cost = multipleResults.Read<float>().Single();
+            var loss = multipleResults.Read<float>().Single();
+            var assetCodeList = multipleResults.Read<string>();
+
             return new PaggingData<Assets>()
-                    {
-                        Data = asset.ToList(),
-                        TotalCount = totalCount
-                    };
+            {
+                Data = asset.ToList(),
+                TotalCount = totalCount,
+                Quantity = quantity,
+                Cost = cost,
+                Loss = loss,
+                AssetCodeList = (List<string>)assetCodeList
+            };
         }
 
-        public IEnumerable<Assets> GetAllAssets()
-        {
-            //khởi tạo kết nối db
-            string connectionString = "Server=localhost;Port=3306;Database=misa.web08.hcsn.nvhthai;Uid=root;Pwd=thaibqhg12;";
-            var mySqlConnection = new MySqlConnection(connectionString);
-
-            //khai báo tên stored procedure
-            string storedProcedure = "Proc_asset_GetAll";
-
-
-            // Thực hiện gọi vào db
-            var assets = mySqlConnection.Query<Assets>(storedProcedure, commandType: System.Data.CommandType.StoredProcedure);
-
-            return assets;
-        }
-
-        
-
-        public Assets GetEmployeeByID(Guid assetID)
-        {
-
-            // Khởi tạo kết nối tới DB MySQL
-            string connectionString = "Server=localhost;Port=3306;Database=misa.web08.hcsn.nvhthai;Uid=root;Pwd=thaibqhg12;";
-            var mySqlConnection = new MySqlConnection(connectionString);
-
-            // Chuẩn bị tên Stored procedure
-            string storedProcedureName = "Proc_asset_GetByAssetID";
-
-            // Chuẩn bị tham số đầu vào cho stored procedure
-            var parameters = new DynamicParameters();
-            parameters.Add("@$v_AssetID", assetID);
-
-            // Thực hiện gọi vào DB để chạy stored procedure với tham số đầu vào ở trên
-            var asset = mySqlConnection.QueryFirstOrDefault<Assets>(storedProcedureName, parameters, commandType: System.Data.CommandType.StoredProcedure);
-
-            return asset;
-        }
-
-        public string GetNewEmployeeCode()
+        /// <summary>
+        /// API Lấy mã tài sản mới tự động tăng
+        /// </summary>
+        /// <returns>Mã nhân viên mới tự động tăng</returns>
+        /// Author: NVHThai (16/09/2022)
+        public string GetNewAssetCode()
         {
             // Khởi tạo kết nối tới DB MySQL
             string connectionString = "Server=localhost;Port=3306;Database=misa.web08.hcsn.nvhthai;Uid=root;Pwd=thaibqhg12;";
@@ -132,8 +148,19 @@ namespace MISA.Web08.QLTS.DL
 
             // Trả về dữ liệu cho client
             return newAssetCode;
-        }   
+        }
+        
+        #endregion
 
+
+        #region API Post
+        
+        /// <summary>
+        /// Thêm mới 1 tài sản
+        /// </summary>
+        /// <param name="asset">Thông tin tài sản thêm vào cơ sở dữ liệu</param>
+        /// <returns>id của tài sản thêm mới</returns>
+        /// Author: NVHThai (19/09/2022)
         public InsertData InsertAsset(Assets asset)
         {
 
@@ -168,13 +195,26 @@ namespace MISA.Web08.QLTS.DL
             parameters.Add("$v_CreateDate", DateTime.Now);
             parameters.Add("$v_ModifiedBy", "Nguyễn Vũ Hải Thái");
             parameters.Add("$v_ModifiedDate", DateTime.Now);
+            parameters.Add("$v_LossYear", asset.loss_year);
 
             //thực hiện gọi vào db để chạy procdure
             var numberOfAffectedRows = mySqlConnection.Execute(storedProcedureName, parameters, commandType: System.Data.CommandType.StoredProcedure);
 
             return new InsertData(assetID, numberOfAffectedRows);
         }
+        
+        #endregion
 
+
+        #region API Put
+  
+        /// <summary>
+        /// Sửa 1 tài sản
+        /// </summary>
+        /// <param name="assetID">ID của tài sản cần sửa</param>
+        /// <param name="asset">Thông tin tài sản cần sửa</param>
+        /// <returns>id của tài sản sửa và số cột bị ảnh hưởng</returns>
+        /// Author: NVHThai (19/09/2022)
         public EditData UpdateAsset(Guid assetID, Assets asset)
         {
             //khởi tạo kết nối đến db mySQL
@@ -203,11 +243,77 @@ namespace MISA.Web08.QLTS.DL
             parameters.Add("$v_ProductionDay", asset.production_date);
             parameters.Add("$v_ModifiedBy", "Nguyễn Vũ Hải Thái");
             parameters.Add("$v_ModifiedDate", DateTime.Now);
+            parameters.Add("$v_LossYear", asset.loss_year);
+
 
             //thực hiện gọi vào db để chạy procdure
             var numberOfAffectedRows = mySqlConnection.Execute(storedProcedureName, parameters, commandType: System.Data.CommandType.StoredProcedure);
 
             return new EditData(assetID, numberOfAffectedRows);
         }
+        
+        #endregion
+
+        #region API Delete
+        
+        /// <summary>
+        /// Xóa 1 tài sản bằng id
+        /// </summary>
+        /// <param name="assetID">ID của tài sản muốn xóa</param>
+        /// <returns>id của tài sản xóa</returns>
+        /// Author: NVHThai (19/09/2022)
+        public int DeleteAsset(Guid assetID)
+        {
+            //khởi tạo kết nối db
+            string connectionString = "Server=localhost;Port=3306;Database=misa.web08.hcsn.nvhthai;Uid=root;Pwd=thaibqhg12;";
+            var mySqlConnection = new MySqlConnection(connectionString);
+
+            // Chuẩn bị tên Stored procedure
+            string storedProcedureName = "Proc_asset_DeleteByID";
+
+            // Chuẩn bị tham số đầu vào cho stored procedure
+            var parameters = new DynamicParameters();
+            parameters.Add("@$v_AssetID", assetID);
+
+            // Thực hiện gọi vào DB để chạy stored procedure với tham số đầu vào ở trên
+            var numberOfAffectedRows = mySqlConnection.Execute(storedProcedureName, parameters, commandType: System.Data.CommandType.StoredProcedure);
+
+            return numberOfAffectedRows;
+        }
+
+
+        /// <summary>
+        /// Xóa nhiều tài sản bằng id tài sản
+        /// </summary>
+        /// <param name="assetIDs">Danh sách id của tài sản muốn xóa</param>
+        /// <returns>số cột bị ảnh hưởng</returns>
+        /// Author: NVHThai (19/09/2022)
+        public int DeleteMutipleAssets(List<string> assetList)
+        {
+            // Khởi tạo kết nối tới DB MySQL
+            string connectionString = "Server=localhost;Port=3306;Database=misa.web08.hcsn.nvhthai;Uid=root;Pwd=thaibqhg12;";
+            var mySqlConnection = new MySqlConnection(connectionString);
+
+            // Khai báo tên prodecure Insert
+            string storedProcedureName = "Proc_asset_Deletes";
+
+            // Chuẩn bị tham số đầu vào cho procedure
+            var parameters = new DynamicParameters();
+            var queryList = new List<string>();
+            for (int i = 0; i < assetList.Count; i++)
+            {
+                queryList.Add($"fixed_asset_id LIKE '{assetList[i]}'");
+            }
+            string assetIds = string.Join(" OR ", queryList);
+            parameters.Add("$v_data", assetIds);
+
+            // Xử lý dữ liệu trả về
+
+            var listAssetIds = mySqlConnection.Query(storedProcedureName, parameters, commandType: System.Data.CommandType.StoredProcedure);
+
+            return assetList.Count;
+        }
+        
+        #endregion
     }
 }

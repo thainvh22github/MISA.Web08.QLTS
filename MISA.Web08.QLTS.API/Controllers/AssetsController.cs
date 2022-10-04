@@ -16,14 +16,23 @@ namespace MISA.Web08.QLTS.API
     [ApiController]
     public class AssetsController : ControllerBase
     {
+        #region Field
+
         private IAssetBL _assetBL;
 
+        #endregion
+
+        #region Contructor
+        
         public AssetsController(IAssetBL assetBL)
         {
             _assetBL = assetBL;
-        }
+        } 
+        
+        #endregion
 
-        #region Api get
+        #region Api Get
+
         /// <summary>
         /// API lấy danh sách toàn bộ nhân viên
         /// </summary>
@@ -33,7 +42,6 @@ namespace MISA.Web08.QLTS.API
         [Route("")]
         public IActionResult GetAllAssets()
         {
-
             try
             {
                 var assets = _assetBL.GetAllAssets();
@@ -51,10 +59,7 @@ namespace MISA.Web08.QLTS.API
                     Resource.MoreInfo_Exception,
                     HttpContext.TraceIdentifier));
             }
-
-
         }
-
 
         /// <summary>
         /// Api lấy thông tin 1 tài sản theo id
@@ -68,8 +73,7 @@ namespace MISA.Web08.QLTS.API
         {
             try
             {
-
-                var asset = _assetBL.GetEmployeeByID(assetID);
+                var asset = _assetBL.GetAssetByID(assetID);
 
                 // Xử lý kết quả trả về từ DB
                 if (asset != null)
@@ -110,7 +114,7 @@ namespace MISA.Web08.QLTS.API
         {
             try
             {
-                var multipleResults = _assetBL.FilterAssets(keword,assetCategoryID,departmentID,limit,offset);  
+                var multipleResults = _assetBL.FilterAssets(keword, assetCategoryID, departmentID, limit, offset);
                 // Xử lý kết quả trả về từ DB
                 if (multipleResults != null)
                 {
@@ -132,8 +136,6 @@ namespace MISA.Web08.QLTS.API
                     Resource.MoreInfo_Exception,
                     HttpContext.TraceIdentifier));
             }
-
-
         }
 
 
@@ -149,7 +151,7 @@ namespace MISA.Web08.QLTS.API
             try
             {
 
-                var newAssetCode = _assetBL.GetNewEmployeeCode();
+                var newAssetCode = _assetBL.GetNewAssetCode();
 
                 // Trả về dữ liệu cho client
                 return StatusCode(StatusCodes.Status200OK, newAssetCode);
@@ -164,11 +166,12 @@ namespace MISA.Web08.QLTS.API
         #endregion
 
 
-        #region Api post
+        #region API Post
+
         /// <summary>
         /// Thêm mới 1 tài sản
         /// </summary>
-        /// <param name="asset"></param>
+        /// <param name="asset">Thông tin tài sản muốn thêm</param>
         /// <returns>id của tài sản thêm mới</returns>
         /// Author: NVHThai (19/09/2022)
         [HttpPost]
@@ -179,7 +182,6 @@ namespace MISA.Web08.QLTS.API
             {
                 var insertData = _assetBL.InsertAsset(asset);
 
-                // xử lý trả về dữ liệu
                 if (insertData.numberOfAffectedRows > 0)
                 {
                     return StatusCode(StatusCodes.Status201Created, insertData.assetID);
@@ -204,29 +206,31 @@ namespace MISA.Web08.QLTS.API
 
         #endregion
 
-        #region api put
+        #region API PUT
+
         /// <summary>
         /// Sửa 1 tài sản
         /// </summary>
-        /// <param name="asset"></param>
-        /// <param name="asset"></param>
+        /// <param name="assetID">ID tài sản cần sửa</param>
+        /// <param name="asset">Thông tin tài sản cần sửa</param>
         /// <returns>id của tài sản sửa</returns>
         /// Author: NVHThai (19/09/2022)
         [HttpPut("{assetID}")]
         public IActionResult UpdateAsset([FromRoute] Guid assetID, [FromBody] Assets asset)
         {
-            try { 
+            try
+            {
                 var dataUpdate = _assetBL.UpdateAsset(assetID, asset);
 
-                    // xử lý trả về dữ liệu
-                    if (dataUpdate.numberOfAffectedRows > 0)
-                    {
-                        return StatusCode(StatusCodes.Status201Created, dataUpdate.assetID);
-                    }
-                    else
-                    {
-                        return StatusCode(StatusCodes.Status400BadRequest);
-                    }
+                // xử lý trả về dữ liệu
+                if (dataUpdate.numberOfAffectedRows > 0)
+                {
+                    return StatusCode(StatusCodes.Status201Created, dataUpdate.assetID);
+                }
+                else
+                {
+                    return StatusCode(StatusCodes.Status400BadRequest);
+                }
             }
             catch (Exception ex)
             {
@@ -239,16 +243,18 @@ namespace MISA.Web08.QLTS.API
                     HttpContext.TraceIdentifier));
             }
         }
+
         #endregion
 
-        #region api delete
+        #region API Delete
 
         /// <summary>
         /// Xóa 1 tài sản bằng id
         /// </summary>
-        /// <param name="assetID"></param>
+        /// <param name="assetID">ID tài sản cần xóa</param>
         /// <returns>id của tài sản xóa</returns>
         /// Author: NVHThai (19/09/2022)
+
         [HttpDelete("{assetID}")]
         public IActionResult DeleteAsset([FromRoute] Guid assetID)
         {
@@ -281,13 +287,15 @@ namespace MISA.Web08.QLTS.API
         /// <summary>
         /// Xóa nhiều tài sản
         /// </summary>
-        /// <param name="assetIDs"></param>
-        /// <returns>1 list các id tài sản vừa bị xóa</returns>
+        /// <param name="assetIDs">Danh sách ID tài sản cần xóa</param>
+        /// <returns>Số tài sản bị ảnh hưởng</returns>
+        /// Author: NVHThai (19/09/2022)
         [HttpPost("batch-delete")]
-        public IActionResult DeleteMutipleAssets([FromBody] List<string> assetIDs)
+        public int DeleteMutipleAssets(List<string> assetList)
         {
-            return StatusCode(StatusCodes.Status200OK);
+            return _assetBL.DeleteMutipleAssets(assetList);
         }
+
         #endregion
     }
 }

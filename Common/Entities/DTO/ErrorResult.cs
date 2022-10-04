@@ -12,7 +12,7 @@ namespace MISA.Web08.QLTS.API.Entities
         public AssetErrorCode ErrorCode { get; set; }
 
         /// <summary>
-        /// Lời nhắn cho dev
+        /// Lời nhắn cho lập trình viên
         /// </summary>
         public string DevMsg { get; set; }
 

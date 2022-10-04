@@ -9,7 +9,8 @@ namespace MISA.Web08.QLTS.BL
 {
     public interface IAssetBL
     {
-        #region Api get
+        #region API Get
+
         /// <summary>
         /// lấy danh sách toàn bộ nhân viên
         /// </summary>
@@ -17,16 +18,13 @@ namespace MISA.Web08.QLTS.BL
         /// Author: NVHThai (16/09/2022)
         public IEnumerable<Assets> GetAllAssets();
 
-
-
         /// <summary>
         /// lấy thông tin 1 tài sản theo id
         /// </summary>
         /// <param name="assetID">ID tài sản muốn lấy</param>
         /// <returns>Thông tin 1 tài sản</returns>
         /// Author: NVHThai (16/09/2022)
-
-        public Assets GetEmployeeByID(Guid assetID);
+        public Assets GetAssetByID(Guid assetID);
 
 
         /// <summary>
@@ -47,39 +45,40 @@ namespace MISA.Web08.QLTS.BL
         /// </summary>
         /// <returns>Mã nhân viên mới tự động tăng</returns>
         /// Author: NVHThai (16/09/2022)
-        public string GetNewEmployeeCode();
+        public string GetNewAssetCode();
 
         #endregion
 
-
-        #region Api post
+        #region API Post
         /// <summary>
         /// Thêm mới 1 tài sản
         /// </summary>
-        /// <param name="asset"></param>
+        /// <param name="asset">Thông tin tài sản muốn thêm</param>
         /// <returns>id của tài sản thêm mới</returns>
         /// Author: NVHThai (19/09/2022)
         public InsertData InsertAsset(Assets asset);
 
         #endregion
 
-        #region api put
+        #region API Put
+
         /// <summary>
         /// Sửa 1 tài sản
         /// </summary>
-        /// <param name="asset"></param>
-        /// <param name="asset"></param>
+        /// <param name="assetID">ID tài sản cần sửa</param>
+        /// <param name="asset">Thông tin tài sản cần sửa</param>
         /// <returns>id của tài sản sửa</returns>
         /// Author: NVHThai (19/09/2022)
         public EditData UpdateAsset(Guid assetID, Assets asset);
+
         #endregion
 
-        #region api delete
+        #region API Delete
 
         /// <summary>
         /// Xóa 1 tài sản bằng id
         /// </summary>
-        /// <param name="assetID"></param>
+        /// <param name="assetID">ID tài sản cần xóa</param>
         /// <returns>id của tài sản xóa</returns>
         /// Author: NVHThai (19/09/2022)
         public int DeleteAsset(Guid assetID);
@@ -87,9 +86,11 @@ namespace MISA.Web08.QLTS.BL
         /// <summary>
         /// Xóa nhiều tài sản
         /// </summary>
-        /// <param name="assetIDs"></param>
-        /// <returns>1 list các id tài sản vừa bị xóa</returns>
-        //public IActionResult DeleteMutipleAssets(List<string> assetIDs);
+        /// <param name="assetIDs">Danh sách ID tài sản cần xóa</param>
+        /// <returns>Số tài sản bị ảnh hưởng</returns>
+        /// Author: NVHThai (19/09/2022)
+        public int DeleteMutipleAssets(List<string> assetList);
+        
         #endregion
     }
 }
