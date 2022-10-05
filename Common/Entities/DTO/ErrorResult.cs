@@ -29,7 +29,7 @@ namespace MISA.Web08.QLTS.API.Entities
         /// <summary>
         /// Số nhận dạng theo dõi
         /// </summary>
-        public string TraceId { get; set; }
+        public string? TraceId { get; set; }
 
         #endregion
 
@@ -37,7 +37,7 @@ namespace MISA.Web08.QLTS.API.Entities
 
         public ErrorResult() { }
 
-        public ErrorResult(AssetErrorCode errorCode, string devMsg, string userMsg, Object moreInfo, string traceId)
+        public ErrorResult(AssetErrorCode errorCode, string devMsg, string userMsg, Object moreInfo, string? traceId = null)
         {
             ErrorCode = errorCode;
             DevMsg = devMsg;

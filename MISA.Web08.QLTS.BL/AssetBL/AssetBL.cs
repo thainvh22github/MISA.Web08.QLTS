@@ -1,10 +1,14 @@
 ﻿using MISA.Web08.QLTS.Common.Entities;
+using MISA.Web08.QLTS.Common.Attributes;
 using MISA.Web08.QLTS.DL;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MISA.Web08.QLTS.Common.Enums;
+using MISA.Web08.QLTS.Common.Resources;
+using MISA.Web08.QLTS.API.Entities;
 
 namespace MISA.Web08.QLTS.BL
 {
@@ -12,19 +16,55 @@ namespace MISA.Web08.QLTS.BL
     {
 
         #region Field
-        
+
         private IAssetDL _assetDL;
 
         #endregion
 
 
         #region Contructor
-        
+
         public AssetBL(IAssetDL assetDL)
         {
             _assetDL = assetDL;
         }
 
+        /// <summary>
+        /// Validate dữ liệu truyền lên từ API
+        /// </summary>
+        /// <param name="asset">Đối tượng tài sản cần validate</param>
+        /// <returns>Đối tượng ServiceResponse mỗ tả thành công hay thất bại</returns>
+        /// Author: NVHThai (04/10/2022)
+        private ServiceResponse ValidateRequestData(Assets asset)
+        {
+            // Validate dữ liệu đầu vào
+            var properties = typeof(Assets).GetProperties();
+            var validateFailures = new List<string>();
+            foreach (var property in properties)
+            {
+                string propertyName = property.Name;
+                var propertyValue = property.GetValue(asset);
+                var IsNotNullOrEmptyAttribute = (IsNotNullOrEmptyAttribute?)Attribute.GetCustomAttribute(property, typeof(IsNotNullOrEmptyAttribute));
+                if (IsNotNullOrEmptyAttribute != null && string.IsNullOrEmpty(propertyValue?.ToString()))
+                {
+                    validateFailures.Add(IsNotNullOrEmptyAttribute.ErrorMessage);
+                }
+            }
+
+            if (validateFailures.Count > 0)
+            {
+                return new ServiceResponse
+                {
+                    Success = false,
+                    Data = new ErrorResult(
+                    AssetErrorCode.InvalidInput,
+                    Resource.UserMsg_ValidateFailed,
+                    Resource.UserMsg_ValidateFailed,
+                    validateFailures)
+                };
+            }
+            return new ServiceResponse { Success = true };
+        }
 
         #endregion
 
@@ -80,10 +120,58 @@ namespace MISA.Web08.QLTS.BL
         /// <param name="asset">Thông tin tài sản muốn thêm</param>
         /// <returns>id của tài sản thêm mới</returns>
         /// Author: NVHThai (19/09/2022)
-        public InsertData InsertAsset(Assets asset)
+        public ServiceResponse InsertAsset(Assets asset)
         {
-            return _assetDL.InsertAsset(asset);
+
+            var validateResult = ValidateRequestData(asset);
+
+            if (validateResult != null && validateResult.Success)
+            {
+                var newAssetID = _assetDL.InsertAsset(asset);
+
+                if (newAssetID.assetID != Guid.Empty && newAssetID.numberOfAffectedRows != -1)
+                {
+                    return new ServiceResponse {
+                        Success = true,
+                        Data = newAssetID
+                    };
+                }
+                else if (newAssetID.assetID == Guid.Empty && newAssetID.numberOfAffectedRows == -1)
+                {
+                    return new ServiceResponse
+                    {
+                        Success = false,
+                        Data = new ErrorResult(
+                        AssetErrorCode.DuplicateCode,
+                        Resource.DevMsg_ValidateDuplicateCode,
+                        Resource.UseMsg_ValidateDuplicateCode,
+                        Resource.MoreInfo_Exception)
+                    };
+                }
+                else
+                {
+                    return new ServiceResponse
+                    {
+                        Success = false,
+                        Data = new ErrorResult(
+                        AssetErrorCode.EmptyCode,
+                        Resource.DevMeg_ValidateFailed,
+                        Resource.UserMsg_ValidateFailed,
+                        Resource.MoreInfo_Exception)
+                    };
+                }
+            }
+            else
+            {
+                return new ServiceResponse
+                {
+                    Success = false,
+                    Data = validateResult.Data
+                };
+            }
+            
         }
+
 
         /// <summary>
         /// Sửa 1 tài sản

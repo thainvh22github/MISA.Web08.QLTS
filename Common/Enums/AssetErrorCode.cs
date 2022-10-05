@@ -42,5 +42,10 @@
         /// Dữ liệu đầu vào không hợp lệ
         /// </summary>
         InvalidInput = 8,
+
+        /// <summary>
+        /// Lấy dữ liệu từ DB thất bại
+        /// </summary>
+        GetFailed = 9,
     }
 }

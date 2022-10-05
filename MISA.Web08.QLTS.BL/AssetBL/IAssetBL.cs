@@ -56,7 +56,7 @@ namespace MISA.Web08.QLTS.BL
         /// <param name="asset">Thông tin tài sản muốn thêm</param>
         /// <returns>id của tài sản thêm mới</returns>
         /// Author: NVHThai (19/09/2022)
-        public InsertData InsertAsset(Assets asset);
+        public ServiceResponse InsertAsset(Assets asset);
 
         #endregion
 

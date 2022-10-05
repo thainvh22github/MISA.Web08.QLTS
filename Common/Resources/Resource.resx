@@ -125,13 +125,46 @@
     <value>Catch an exception</value>
     <comment>Thông báo cho dev khi gọi API bị exception</comment>
   </data>
+  <data name="DevMsg_ValidateDuplicateCode" xml:space="preserve">
+    <value>Error asset duplicate exception </value>
+    <comment>Thông báo cho dev khi gọi api bị mã tài sản tồn tại</comment>
+  </data>
   <data name="MoreInfo_Exception" xml:space="preserve">
     <value>https://openapi.misa.com.vn/errorcode/e001</value>
     <comment>Đường dẫn đến trang mô tả lỗi Insert vào bản ghi thất bại</comment>
   </data>
+  <data name="Proc_DeleteByID" xml:space="preserve">
+    <value>Proc_{0}_DeleteByID</value>
+  </data>
+  <data name="Proc_Deletes" xml:space="preserve">
+    <value>Proc_{0}_Deletes</value>
+  </data>
+  <data name="Proc_EditByID" xml:space="preserve">
+    <value>Proc_{0}_EditByID</value>
+  </data>
+  <data name="Proc_GetAll" xml:space="preserve">
+    <value>Proc_{0}_GetAll</value>
+    <comment>Tên proc chung cho lấy tất cả</comment>
+  </data>
+  <data name="Proc_GetByAssetID" xml:space="preserve">
+    <value>Proc_{0}_GetByAssetID</value>
+  </data>
+  <data name="Proc_GetMaxCode" xml:space="preserve">
+    <value>Proc_{0}_GetMaxCode</value>
+  </data>
+  <data name="Proc_GetPaging" xml:space="preserve">
+    <value>Proc_{0}_GetPaging</value>
+  </data>
+  <data name="Proc_InsertOne" xml:space="preserve">
+    <value>Proc_{0}_InsertOne</value>
+  </data>
   <data name="UseMsg_Exception" xml:space="preserve">
     <value>Có lỗi xảy ra vui lòng liên hệ MISA</value>
     <comment>Thông báo cho người dùng khi gọi API bị exception</comment>
+  </data>
+  <data name="UseMsg_ValidateDuplicateCode" xml:space="preserve">
+    <value>Mã tài sản đã tồn tại</value>
+    <comment>Thông báo cho người dùng khi mã tài sản tồn tại</comment>
   </data>
   <data name="UserMsg_ValidateFailed" xml:space="preserve">
     <value>Dữ liệu đầu vào không hợp lệ</value>

@@ -1,5 +1,4 @@
-﻿// using: sử dụng các hàm
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MISA.Web08.QLTS.API.Entities;
 using MISA.Web08.QLTS.Common.Entities;
@@ -45,9 +44,15 @@ namespace MISA.Web08.QLTS.API
             try
             {
                 var assets = _assetBL.GetAllAssets();
-                // Xử lý kết quả trả về từ DB
 
-                return StatusCode(StatusCodes.Status200OK, assets);
+                if (assets != null)
+                {
+                    return StatusCode(StatusCodes.Status200OK, assets);
+                }
+                else
+                {
+                    return StatusCode(StatusCodes.Status400BadRequest, AssetErrorCode.GetFailed);
+                }
             }
             catch (Exception ex)
             {
@@ -82,7 +87,7 @@ namespace MISA.Web08.QLTS.API
                 }
                 else
                 {
-                    return StatusCode(StatusCodes.Status404NotFound);
+                    return StatusCode(StatusCodes.Status404NotFound, AssetErrorCode.GetFailed);
                 }
             }
             catch (Exception ex)
@@ -122,7 +127,7 @@ namespace MISA.Web08.QLTS.API
                 }
                 else
                 {
-                    return StatusCode(StatusCodes.Status400BadRequest, "e002");
+                    return StatusCode(StatusCodes.Status400BadRequest, AssetErrorCode.GetFailed);
                 }
             }
             catch (Exception ex)
@@ -152,14 +157,24 @@ namespace MISA.Web08.QLTS.API
             {
 
                 var newAssetCode = _assetBL.GetNewAssetCode();
-
-                // Trả về dữ liệu cho client
-                return StatusCode(StatusCodes.Status200OK, newAssetCode);
+                if (newAssetCode != null)
+                {
+                    return StatusCode(StatusCodes.Status200OK, newAssetCode);
+                }
+                else
+                {
+                    return StatusCode(StatusCodes.Status400BadRequest, AssetErrorCode.GetFailed);
+                }
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return StatusCode(StatusCodes.Status500InternalServerError, "e001");
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResult(
+                    AssetErrorCode.Exception,
+                    Resource.DevMsg_Exception,
+                    Resource.DevMsg_Exception,
+                    Resource.MoreInfo_Exception,
+                    HttpContext.TraceIdentifier));
             }
         }
 
@@ -181,15 +196,8 @@ namespace MISA.Web08.QLTS.API
             try
             {
                 var insertData = _assetBL.InsertAsset(asset);
-
-                if (insertData.numberOfAffectedRows > 0)
-                {
-                    return StatusCode(StatusCodes.Status201Created, insertData.assetID);
-                }
-                else
-                {
-                    return StatusCode(StatusCodes.Status400BadRequest);
-                }
+                return StatusCode(StatusCodes.Status201Created, insertData.Data);
+                
             }
 
             catch (Exception ex)
@@ -198,7 +206,7 @@ namespace MISA.Web08.QLTS.API
                 return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResult(
                     AssetErrorCode.Exception,
                     Resource.DevMsg_Exception,
-                    Resource.DevMsg_Exception,
+                    Resource.UseMsg_Exception,
                     Resource.MoreInfo_Exception,
                     HttpContext.TraceIdentifier));
             }
@@ -222,15 +230,7 @@ namespace MISA.Web08.QLTS.API
             {
                 var dataUpdate = _assetBL.UpdateAsset(assetID, asset);
 
-                // xử lý trả về dữ liệu
-                if (dataUpdate.numberOfAffectedRows > 0)
-                {
-                    return StatusCode(StatusCodes.Status201Created, dataUpdate.assetID);
-                }
-                else
-                {
-                    return StatusCode(StatusCodes.Status400BadRequest);
-                }
+               return StatusCode(StatusCodes.Status201Created, dataUpdate.assetID);
             }
             catch (Exception ex)
             {
@@ -238,9 +238,9 @@ namespace MISA.Web08.QLTS.API
                 return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResult(
                     AssetErrorCode.Exception,
                     Resource.DevMsg_Exception,
-                    Resource.DevMsg_Exception,
+                    Resource.UseMsg_Exception,
                     Resource.MoreInfo_Exception,
-                    HttpContext.TraceIdentifier));
+                    HttpContext.TraceIdentifier));  
             }
         }
 
@@ -269,7 +269,7 @@ namespace MISA.Web08.QLTS.API
                 }
                 else
                 {
-                    return StatusCode(StatusCodes.Status400BadRequest, "e002");
+                    return StatusCode(StatusCodes.Status400BadRequest, AssetErrorCode.DeleteFailed);
                 }
             }
             catch (Exception ex)
@@ -278,7 +278,7 @@ namespace MISA.Web08.QLTS.API
                 return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResult(
                     AssetErrorCode.Exception,
                     Resource.DevMsg_Exception,
-                    Resource.DevMsg_Exception,
+                    Resource.UseMsg_Exception,
                     Resource.MoreInfo_Exception,
                     HttpContext.TraceIdentifier));
             }
@@ -291,9 +291,12 @@ namespace MISA.Web08.QLTS.API
         /// <returns>Số tài sản bị ảnh hưởng</returns>
         /// Author: NVHThai (19/09/2022)
         [HttpPost("batch-delete")]
-        public int DeleteMutipleAssets(List<string> assetList)
+        public int DeleteMutipleAssets([FromBody] List<string> assetList)
         {
-            return _assetBL.DeleteMutipleAssets(assetList);
+            
+             return _assetBL.DeleteMutipleAssets(assetList);
+
+          
         }
 
         #endregion

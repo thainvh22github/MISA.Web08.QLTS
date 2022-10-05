@@ -1,4 +1,4 @@
-using MISA.Web08.QLTS.BL;
+﻿using MISA.Web08.QLTS.BL;
 using MISA.Web08.QLTS.Common.Entities;
 using MISA.Web08.QLTS.DL;
 
@@ -18,6 +18,14 @@ builder.Services.AddScoped<IDepartmentBL, DepartmentBL>();
 builder.Services.AddScoped<IAssetCategoryBL, AssetCategoryBL>();
 builder.Services.AddScoped<IAssetCategoryDL, AssetCategoryDL>();
 
+// Lấy dữ liệu connection string từ file appsetting
+DataContext.MySqlConnectionString = builder.Configuration.GetConnectionString("MySqlConnectionString");
+
+// validate sử dụng ModelState
+builder.Services.AddControllers().ConfigureApiBehaviorOptions(options =>
+{
+    options.SuppressInferBindingSourcesForParameters = true;
+});
 
 builder.Services.AddControllers();
 builder.Services.AddCors(option =>

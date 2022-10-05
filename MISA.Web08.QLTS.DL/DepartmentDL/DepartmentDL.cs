@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using MISA.Web08.QLTS.Common.Entities;
+using MISA.Web08.QLTS.Common.Resources;
 using MySqlConnector;
 using System;
 using System.Collections.Generic;
@@ -23,11 +24,11 @@ namespace MISA.Web08.QLTS.DL
         {
 
             //khởi tạo kết nối db
-            string connectionString = "Server=localhost;Port=3306;Database=misa.web08.hcsn.nvhthai;Uid=root;Pwd=thaibqhg12;";
+            string connectionString = DataContext.MySqlConnectionString;
             var mySqlConnection = new MySqlConnection(connectionString);
 
             // Chuẩn bị tên Stored procedure
-            string storedProcedureName = "Proc_department_GetAll";
+            string storedProcedureName = String.Format(Resource.Proc_GetAll, typeof(Department).Name);
 
             // Chuẩn bị tham số đầu vào cho stored procedure
             var parameters = new DynamicParameters();

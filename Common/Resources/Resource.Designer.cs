@@ -79,6 +79,15 @@ namespace MISA.Web08.QLTS.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error asset duplicate exception .
+        /// </summary>
+        public static string DevMsg_ValidateDuplicateCode {
+            get {
+                return ResourceManager.GetString("DevMsg_ValidateDuplicateCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to https://openapi.misa.com.vn/errorcode/e001.
         /// </summary>
         public static string MoreInfo_Exception {
@@ -88,11 +97,92 @@ namespace MISA.Web08.QLTS.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Proc_{0}_DeleteByID.
+        /// </summary>
+        public static string Proc_DeleteByID {
+            get {
+                return ResourceManager.GetString("Proc_DeleteByID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Proc_{0}_Deletes.
+        /// </summary>
+        public static string Proc_Deletes {
+            get {
+                return ResourceManager.GetString("Proc_Deletes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Proc_{0}_EditByID.
+        /// </summary>
+        public static string Proc_EditByID {
+            get {
+                return ResourceManager.GetString("Proc_EditByID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Proc_{0}_GetAll.
+        /// </summary>
+        public static string Proc_GetAll {
+            get {
+                return ResourceManager.GetString("Proc_GetAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Proc_{0}_GetByAssetID.
+        /// </summary>
+        public static string Proc_GetByAssetID {
+            get {
+                return ResourceManager.GetString("Proc_GetByAssetID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Proc_{0}_GetMaxCode.
+        /// </summary>
+        public static string Proc_GetMaxCode {
+            get {
+                return ResourceManager.GetString("Proc_GetMaxCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Proc_{0}_GetPaging.
+        /// </summary>
+        public static string Proc_GetPaging {
+            get {
+                return ResourceManager.GetString("Proc_GetPaging", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Proc_{0}_InsertOne.
+        /// </summary>
+        public static string Proc_InsertOne {
+            get {
+                return ResourceManager.GetString("Proc_InsertOne", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Có lỗi xảy ra vui lòng liên hệ MISA.
         /// </summary>
         public static string UseMsg_Exception {
             get {
                 return ResourceManager.GetString("UseMsg_Exception", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mã tài sản đã tồn tại.
+        /// </summary>
+        public static string UseMsg_ValidateDuplicateCode {
+            get {
+                return ResourceManager.GetString("UseMsg_ValidateDuplicateCode", resourceCulture);
             }
         }
         

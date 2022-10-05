@@ -2,6 +2,9 @@
 using MySqlConnector;
 using Dapper;
 using MISA.Web08.QLTS.BL;
+using MISA.Web08.QLTS.Common.Enums;
+using MISA.Web08.QLTS.Common.Resources;
+using MISA.Web08.QLTS.API.Entities;
 
 namespace MISA.Web08.QLTS.API.Controllers
 {
@@ -38,14 +41,26 @@ namespace MISA.Web08.QLTS.API.Controllers
             {
                 var assetCategory = _assetCategoryBL.GetAllAssetsCategory(keyword);
 
-                return StatusCode(StatusCodes.Status200OK, assetCategory);
+                if(assetCategory != null)
+                {
+                    return StatusCode(StatusCodes.Status200OK, assetCategory);
+                }
+                else
+                {
+                    return StatusCode(StatusCodes.Status400BadRequest, AssetErrorCode.GetFailed);
+                }
 
-                // Xử lý kết quả trả về từ DB
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return StatusCode(StatusCodes.Status500InternalServerError, "e001");
+                Console.WriteLine(ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResult(
+                    AssetErrorCode.Exception,
+                    Resource.DevMsg_Exception,
+                    Resource.UseMsg_Exception,
+                    Resource.MoreInfo_Exception,
+                    HttpContext.TraceIdentifier));
             }
         } 
         
