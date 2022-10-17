@@ -18,6 +18,9 @@ builder.Services.AddScoped<IDepartmentBL, DepartmentBL>();
 builder.Services.AddScoped<IAssetCategoryBL, AssetCategoryBL>();
 builder.Services.AddScoped<IAssetCategoryDL, AssetCategoryDL>();
 
+builder.Services.AddScoped(typeof(IBaseDL<>), typeof(BaseDL<>));
+builder.Services.AddScoped(typeof(IBaseBL<>), typeof(BaseBL<>));
+
 // Lấy dữ liệu connection string từ file appsetting
 DataContext.MySqlConnectionString = builder.Configuration.GetConnectionString("MySqlConnectionString");
 

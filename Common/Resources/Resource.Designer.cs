@@ -61,11 +61,29 @@ namespace MISA.Web08.QLTS.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to department.
+        /// </summary>
+        public static string Department {
+            get {
+                return ResourceManager.GetString("Department", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid input data.
         /// </summary>
         public static string DevMeg_ValidateFailed {
             get {
                 return ResourceManager.GetString("DevMeg_ValidateFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete Failed.
+        /// </summary>
+        public static string DevMsg_DeleteFailed {
+            get {
+                return ResourceManager.GetString("DevMsg_DeleteFailed", resourceCulture);
             }
         }
         
@@ -79,11 +97,65 @@ namespace MISA.Web08.QLTS.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Get Failed.
+        /// </summary>
+        public static string DevMsg_GetFailed {
+            get {
+                return ResourceManager.GetString("DevMsg_GetFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Server không tìm thấy bất kì tài nguyên nào liên quan tới request URL này.
+        /// </summary>
+        public static string DevMsg_NotFoundException {
+            get {
+                return ResourceManager.GetString("DevMsg_NotFoundException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error asset duplicate exception .
         /// </summary>
         public static string DevMsg_ValidateDuplicateCode {
             get {
                 return ResourceManager.GetString("DevMsg_ValidateDuplicateCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to DuplicateKeyEntry.
+        /// </summary>
+        public static string DuplicateKeyEntry {
+            get {
+                return ResourceManager.GetString("DuplicateKeyEntry", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ErorrException.
+        /// </summary>
+        public static string ErorrException {
+            get {
+                return ResourceManager.GetString("ErorrException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to fixed_asset_category.
+        /// </summary>
+        public static string FixedAssetCategory {
+            get {
+                return ResourceManager.GetString("FixedAssetCategory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://github.com/thainvh22github/AssetErrorCode/blob/main/AssetErrorCode.
+        /// </summary>
+        public static string MoreInfo {
+            get {
+                return ResourceManager.GetString("MoreInfo", resourceCulture);
             }
         }
         
@@ -169,11 +241,29 @@ namespace MISA.Web08.QLTS.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Xóa không thành công.
+        /// </summary>
+        public static string UseMsg_DeleteFailed {
+            get {
+                return ResourceManager.GetString("UseMsg_DeleteFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Có lỗi xảy ra vui lòng liên hệ MISA.
         /// </summary>
         public static string UseMsg_Exception {
             get {
                 return ResourceManager.GetString("UseMsg_Exception", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lấy dữ liệu không thành công, vui lòng liên hệ MISA!.
+        /// </summary>
+        public static string UseMsg_GetFailed {
+            get {
+                return ResourceManager.GetString("UseMsg_GetFailed", resourceCulture);
             }
         }
         
@@ -192,6 +282,42 @@ namespace MISA.Web08.QLTS.Common.Resources {
         public static string UserMsg_ValidateFailed {
             get {
                 return ResourceManager.GetString("UserMsg_ValidateFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tỷ lệ hao mòn phải bằng 1/Số năm sử dụng.
+        /// </summary>
+        public static string validateDetailDepreciationRate {
+            get {
+                return ResourceManager.GetString("validateDetailDepreciationRate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Giá trị hao mòn năm phải nhỏ hơn hoặc bằng nguyên giá.
+        /// </summary>
+        public static string validateDetailLossYear {
+            get {
+                return ResourceManager.GetString("validateDetailLossYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to AssetCategory.
+        /// </summary>
+        public static string ValueAssetCategory {
+            get {
+                return ResourceManager.GetString("ValueAssetCategory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Department.
+        /// </summary>
+        public static string ValueDepartment {
+            get {
+                return ResourceManager.GetString("ValueDepartment", resourceCulture);
             }
         }
     }

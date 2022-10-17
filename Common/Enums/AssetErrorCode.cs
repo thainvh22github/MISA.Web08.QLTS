@@ -47,5 +47,11 @@
         /// Lấy dữ liệu từ DB thất bại
         /// </summary>
         GetFailed = 9,
+
+        /// <summary>
+        /// Server không tìm thấy bất kì tài nguyên nào liên quan tới request URL này
+        /// </summary>
+        NotFound = 10,
+
     }
 }

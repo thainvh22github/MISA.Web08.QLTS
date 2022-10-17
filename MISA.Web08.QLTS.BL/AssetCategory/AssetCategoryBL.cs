@@ -10,7 +10,7 @@ namespace MISA.Web08.QLTS.BL
 {
 
 
-    public class AssetCategoryBL : IAssetCategoryBL
+    public class AssetCategoryBL : BaseBL<AssetCategory>, IAssetCategoryBL
     {
         #region Field
         
@@ -20,28 +20,11 @@ namespace MISA.Web08.QLTS.BL
 
         #region Contructor
         
-        public AssetCategoryBL(IAssetCategoryDL assetCategoryDL)
+        public AssetCategoryBL(IAssetCategoryDL assetCategoryDL) : base(assetCategoryDL)
         {
             _assetCategoryDL = assetCategoryDL;
         }
 
         #endregion
-
-        #region Method
-        
-        /// <summary>
-        /// Lấy danh sách loại tài sản theo tên loại tài sản và mã loại tài sản
-        /// </summary>
-        /// <param name="keword">Tên loại tài sản hoặc mã loại tài sản</param>
-        /// <returns>Danh sách mã loại tài sản</returns>
-        /// Author: NVHThai (28/09/2022)
-        public IEnumerable<AssetCategory> GetAllAssetsCategory(string? keword)
-        {
-            return _assetCategoryDL.GetAllAssetsCategory(keword);
-        } 
-        
-        #endregion
-
-
     }
 }

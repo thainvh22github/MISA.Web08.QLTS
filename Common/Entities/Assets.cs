@@ -58,7 +58,6 @@ namespace MISA.Web08.QLTS.Common.Entities
         /// <summary>
         /// Ngày mua
         /// </summary>
-        [IsNotNullOrEmpty("Ngày mua không được để trống")]
         public DateTime? purchase_date { get; set; }
 
         /// <summary>
@@ -94,7 +93,6 @@ namespace MISA.Web08.QLTS.Common.Entities
         /// <summary>
         /// Ngày bắt đầu sử dụng
         /// </summary>
-        [IsNotNullOrEmpty("Ngày bắt đầu sử dụng không được để trống")]
         public DateTime? production_date { get; set; }
 
         /// <summary>
@@ -120,6 +118,7 @@ namespace MISA.Web08.QLTS.Common.Entities
         /// <summary>
         /// Giá trị hao mòn năm
         /// </summary>
-        public float? loss_year { get; set; } 
+        [IsNotNullOrEmpty("Giá trị hao mòn năm không được để trống")]
+        public float? loss_year { get; set; }
     }
 }

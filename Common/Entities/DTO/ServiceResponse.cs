@@ -9,12 +9,12 @@ namespace MISA.Web08.QLTS.Common.Entities
     /// <summary>
     /// Dữ liệu trả về tầng BL
     /// </summary>
-    public class ServiceResponse
+    public class ServiceResponse 
     {
         /// <summary>
         /// Thành công hay không
         /// </summary>
-        public bool Success { get; set; }
+        public int Success { get; set; }
 
         /// <summary>
         /// Dữ liệu đi kèm khi thành công hoặc thất bại

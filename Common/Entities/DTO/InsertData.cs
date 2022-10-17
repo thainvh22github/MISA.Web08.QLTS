@@ -10,7 +10,14 @@ namespace MISA.Web08.QLTS.Common.Entities
     {
         #region Property
 
+        /// <summary>
+        /// ID tài sản
+        /// </summary>
         public Guid assetID { get; set; }
+
+        /// <summary>
+        /// Số cột bị ảnh hưởng trong db
+        /// </summary>
         public int numberOfAffectedRows { get; set; }
 
         #endregion

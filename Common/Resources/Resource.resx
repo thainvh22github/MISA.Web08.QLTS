@@ -117,17 +117,49 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Department" xml:space="preserve">
+    <value>department</value>
+    <comment>tên bảng phòng ban</comment>
+  </data>
   <data name="DevMeg_ValidateFailed" xml:space="preserve">
     <value>Invalid input data</value>
     <comment>Thông báo cho dev khi dữ liệu đầu vào không hợp lệ</comment>
+  </data>
+  <data name="DevMsg_DeleteFailed" xml:space="preserve">
+    <value>Delete Failed</value>
+    <comment>Thông báo cho lập trình viên khi gọi Api delete không thành công</comment>
   </data>
   <data name="DevMsg_Exception" xml:space="preserve">
     <value>Catch an exception</value>
     <comment>Thông báo cho dev khi gọi API bị exception</comment>
   </data>
+  <data name="DevMsg_GetFailed" xml:space="preserve">
+    <value>Get Failed</value>
+    <comment>Thông báo cho dev khi gọi Api get không thành công</comment>
+  </data>
+  <data name="DevMsg_NotFoundException" xml:space="preserve">
+    <value>Server không tìm thấy bất kì tài nguyên nào liên quan tới request URL này</value>
+    <comment>Lỗi sai url</comment>
+  </data>
   <data name="DevMsg_ValidateDuplicateCode" xml:space="preserve">
     <value>Error asset duplicate exception </value>
     <comment>Thông báo cho dev khi gọi api bị mã tài sản tồn tại</comment>
+  </data>
+  <data name="DuplicateKeyEntry" xml:space="preserve">
+    <value>DuplicateKeyEntry</value>
+    <comment>Lỗi mã tài sản bị trùng khi xiên vào db</comment>
+  </data>
+  <data name="ErorrException" xml:space="preserve">
+    <value>ErorrException</value>
+    <comment>Lỗi exception</comment>
+  </data>
+  <data name="FixedAssetCategory" xml:space="preserve">
+    <value>fixed_asset_category</value>
+    <comment>tên bảng loại tài sản</comment>
+  </data>
+  <data name="MoreInfo" xml:space="preserve">
+    <value>https://github.com/thainvh22github/AssetErrorCode/blob/main/AssetErrorCode</value>
+    <comment>Đường dẫn đến trang mô tả lỗi</comment>
   </data>
   <data name="MoreInfo_Exception" xml:space="preserve">
     <value>https://openapi.misa.com.vn/errorcode/e001</value>
@@ -135,32 +167,47 @@
   </data>
   <data name="Proc_DeleteByID" xml:space="preserve">
     <value>Proc_{0}_DeleteByID</value>
+    <comment>Tên proc chung cho xóa bản ghi theo id</comment>
   </data>
   <data name="Proc_Deletes" xml:space="preserve">
     <value>Proc_{0}_Deletes</value>
+    <comment>Tên proc chung cho xóa nhiều bản ghi</comment>
   </data>
   <data name="Proc_EditByID" xml:space="preserve">
     <value>Proc_{0}_EditByID</value>
+    <comment>Tên proc chung cho sửa bản ghi theo id</comment>
   </data>
   <data name="Proc_GetAll" xml:space="preserve">
     <value>Proc_{0}_GetAll</value>
-    <comment>Tên proc chung cho lấy tất cả</comment>
+    <comment>Tên proc chung cho lấy tất cả bản ghi</comment>
   </data>
   <data name="Proc_GetByAssetID" xml:space="preserve">
     <value>Proc_{0}_GetByAssetID</value>
+    <comment>Tên proc chung cho lấy bản ghi theo id</comment>
   </data>
   <data name="Proc_GetMaxCode" xml:space="preserve">
     <value>Proc_{0}_GetMaxCode</value>
+    <comment>Tên proc chung cho lấy mã tiếp theo</comment>
   </data>
   <data name="Proc_GetPaging" xml:space="preserve">
     <value>Proc_{0}_GetPaging</value>
+    <comment>Tên proc chung cho phân trang</comment>
   </data>
   <data name="Proc_InsertOne" xml:space="preserve">
     <value>Proc_{0}_InsertOne</value>
+    <comment>Tên proc chung cho thêm 1 bản ghi</comment>
+  </data>
+  <data name="UseMsg_DeleteFailed" xml:space="preserve">
+    <value>Xóa không thành công</value>
+    <comment>Thông báo cho người dùng khi gọi Api delete không thành công</comment>
   </data>
   <data name="UseMsg_Exception" xml:space="preserve">
     <value>Có lỗi xảy ra vui lòng liên hệ MISA</value>
     <comment>Thông báo cho người dùng khi gọi API bị exception</comment>
+  </data>
+  <data name="UseMsg_GetFailed" xml:space="preserve">
+    <value>Lấy dữ liệu không thành công, vui lòng liên hệ MISA!</value>
+    <comment>Thông báo cho người dùng khi gọi Api get không thành công</comment>
   </data>
   <data name="UseMsg_ValidateDuplicateCode" xml:space="preserve">
     <value>Mã tài sản đã tồn tại</value>
@@ -169,5 +216,21 @@
   <data name="UserMsg_ValidateFailed" xml:space="preserve">
     <value>Dữ liệu đầu vào không hợp lệ</value>
     <comment>Thông báo cho người dùng khi dữ liệu đầu vào không hợp lệ</comment>
+  </data>
+  <data name="validateDetailDepreciationRate" xml:space="preserve">
+    <value>Tỷ lệ hao mòn phải bằng 1/Số năm sử dụng</value>
+    <comment>validate nghiệp vụ</comment>
+  </data>
+  <data name="validateDetailLossYear" xml:space="preserve">
+    <value>Giá trị hao mòn năm phải nhỏ hơn hoặc bằng nguyên giá</value>
+    <comment>validate nghiệp vụ</comment>
+  </data>
+  <data name="ValueAssetCategory" xml:space="preserve">
+    <value>AssetCategory</value>
+    <comment>Tên typeof Proc của bảng loại tài sản</comment>
+  </data>
+  <data name="ValueDepartment" xml:space="preserve">
+    <value>Department</value>
+    <comment>Tên typeof Proc của bảng phòng ban</comment>
   </data>
 </root>

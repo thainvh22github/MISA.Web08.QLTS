@@ -8,16 +8,9 @@ using System.Threading.Tasks;
 
 namespace MISA.Web08.QLTS.DL
 {
-    public interface IAssetDL
+    public interface IAssetDL : IBaseDL<Assets>
     {
         #region API Get
-
-        /// <summary>
-        /// lấy danh sách toàn bộ nhân viên
-        /// </summary>
-        /// <returns>Lấy danh sách toàn bộ tài sản</returns>
-        /// Author: NVHThai (16/09/2022)
-        public IEnumerable<Assets> GetAllAssets();
 
         /// <summary>
         /// lấy thông tin 1 tài sản theo id
