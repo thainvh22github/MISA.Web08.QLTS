@@ -35,4 +35,27 @@
         #endregion
     }
 
+    /// <summary>
+    /// Attribute tạo tên cột phục vụ cho việc Export Excel
+    /// </summary> 
+    /// Created by: TCDN AnhDV (05/10/2022)
+    [AttributeUsage(AttributeTargets.Property)]
+    public class ExcelColumnNameAttribute : Attribute
+    {
+        /// <summary>
+        /// Tên cột
+        /// </summary>
+        public string ColumnName { get; set; }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="columnName">Tên cột</param>
+        /// Created by: TCDN AnhDV (05/10/2022)
+        public ExcelColumnNameAttribute(string columnName)
+        {
+            ColumnName = columnName;
+        }
+    }
+
 }

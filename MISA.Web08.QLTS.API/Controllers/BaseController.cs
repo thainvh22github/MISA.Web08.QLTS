@@ -108,6 +108,19 @@ namespace MISA.Web08.QLTS.API.Controllers
             }
         }
 
+        /// <summary>
+        /// Xuất file excel danh sách bản ghi
+        /// </summary>
+        /// <returns>File excel danh sách bản ghi</returns>
+        /// Author:NVHThai (17/10/2022)
+        [HttpGet("export")]
+        public IActionResult ExportExcel()
+        {
+            var stream = _baseBL.ExportExcel();
+            string excelName = $"{"danhsachtaisan"}_{DateTime.Now.ToString("ddMMyyyyHHmmss")}.xlsx";
+            return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
+        }
+
         #endregion
     }
 }

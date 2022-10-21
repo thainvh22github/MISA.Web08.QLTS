@@ -14,12 +14,14 @@ namespace MISA.Web08.QLTS.Common.Entities
         /// Mã tài sản
         /// </summary>
         [IsNotNullOrEmpty("Mã tài sản không được để trống")]
+        [ExcelColumnName("Mã tài sản")]
         public string? fixed_asset_code { get; set; }
 
         /// <summary>
         /// Tên tài sản
         /// </summary>
         [IsNotNullOrEmpty("Tên tài sản không được để trống")]
+        [ExcelColumnName("Tên tài sản")]
         public string? fixed_asset_name { get; set; }
 
 
@@ -37,6 +39,7 @@ namespace MISA.Web08.QLTS.Common.Entities
         /// <summary>
         /// Tên loại tài sản
         /// </summary>
+        [ExcelColumnName("Bộ phận sử dụng")]
         public string? department_name { get; set; }
 
         /// <summary>
@@ -53,6 +56,7 @@ namespace MISA.Web08.QLTS.Common.Entities
         /// <summary>
         /// Tên phòng ban
         /// </summary>
+        [ExcelColumnName("Loại tài sản")]
         public string? fixed_asset_category_name { get; set; }
 
         /// <summary>
@@ -64,12 +68,14 @@ namespace MISA.Web08.QLTS.Common.Entities
         /// Nguyên giá
         /// </summary>
         [IsNotNullOrEmpty("Nguyên giá không được để trống")]
+        [ExcelColumnName("Nguyên giá")]
         public float? cost { get; set; }
 
         /// <summary>
         /// Số lượng
         /// </summary>
         [IsNotNullOrEmpty("Số lượng không được để trống")]
+        [ExcelColumnName("Số lượng")]
         public int? quantity { get; set; }
 
         /// <summary>
@@ -119,6 +125,8 @@ namespace MISA.Web08.QLTS.Common.Entities
         /// Giá trị hao mòn năm
         /// </summary>
         [IsNotNullOrEmpty("Giá trị hao mòn năm không được để trống")]
+        [ExcelColumnName("Hao mòn/khấu hao lũy kế")]
         public float? loss_year { get; set; }
+
     }
 }

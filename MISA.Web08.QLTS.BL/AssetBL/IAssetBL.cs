@@ -84,7 +84,7 @@ namespace MISA.Web08.QLTS.BL
         /// <returns>Số tài sản bị ảnh hưởng</returns>
         /// Author: NVHThai (19/09/2022)
         public int DeleteMutipleAssets(List<string> assetList);
-        
+
         #endregion
     }
 }

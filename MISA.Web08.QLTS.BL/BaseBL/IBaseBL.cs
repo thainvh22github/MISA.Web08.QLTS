@@ -22,5 +22,12 @@ namespace MISA.Web08.QLTS.BL
         /// <returns>Danh sách bản ghi có chọn lọc</returns>
         /// Author: NVHThai (28/09/2022)
         public IEnumerable<T> GetFillterRecords(string? keword);
+
+        /// <summary>
+        /// Xuất file excel danh sách bản ghi
+        /// </summary>
+        /// <returns>File excel danh sách bản ghi</returns>
+        /// Author:NVHThai (17/10/2022)
+        public Stream ExportExcel();
     }
 }
