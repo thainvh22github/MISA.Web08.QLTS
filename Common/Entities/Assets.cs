@@ -102,6 +102,11 @@ namespace MISA.Web08.QLTS.Common.Entities
         public DateTime? production_date { get; set; }
 
         /// <summary>
+        /// Tình trạng xem đã ghi tăng chưa
+        /// </summary>
+        public int? active { get; set; }
+
+        /// <summary>
         /// Người tạo bảng
         /// </summary>
         public string? created_by { get; set; }
@@ -127,6 +132,9 @@ namespace MISA.Web08.QLTS.Common.Entities
         [IsNotNullOrEmpty("Giá trị hao mòn năm không được để trống")]
         [ExcelColumnName("Hao mòn/khấu hao lũy kế")]
         public float? loss_year { get; set; }
+
+
+        public string? budget { get; set; }
 
     }
 }

@@ -36,8 +36,6 @@ namespace MISA.Web08.QLTS.DL
                 var asset = mySqlConnection.QueryFirstOrDefault<Assets>(storedProcedureName, parameters, commandType: System.Data.CommandType.StoredProcedure);
                 return asset;
             }
-
-            
         }
 
         /// <summary>
@@ -163,6 +161,7 @@ namespace MISA.Web08.QLTS.DL
                 parameters.Add("$v_ModifiedBy", "Nguyễn Vũ Hải Thái");
                 parameters.Add("$v_ModifiedDate", DateTime.Now);
                 parameters.Add("$v_LossYear", asset.loss_year);
+                parameters.Add("$v_Budget", asset.budget);
 
                 var numberOfAffectedRows = mySqlConnection.Execute(storedProcedureName, parameters, commandType: System.Data.CommandType.StoredProcedure);
 
@@ -216,6 +215,7 @@ namespace MISA.Web08.QLTS.DL
                 parameters.Add("$v_ModifiedBy", "Nguyễn Vũ Hải Thái");
                 parameters.Add("$v_ModifiedDate", DateTime.Now);
                 parameters.Add("$v_LossYear", asset.loss_year);
+                parameters.Add("$v_Budget", asset.budget);
 
                 var numberOfAffectedRows = mySqlConnection.Execute(storedProcedureName, parameters, commandType: System.Data.CommandType.StoredProcedure);
                 
