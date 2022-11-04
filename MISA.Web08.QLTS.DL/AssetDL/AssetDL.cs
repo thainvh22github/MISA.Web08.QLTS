@@ -39,6 +39,26 @@ namespace MISA.Web08.QLTS.DL
         }
 
         /// <summary>
+        /// Kiểm tra xem id tài sản này đã chứ từ bằng mã nào
+        /// </summary>
+        /// <param name="assetID">ID tài sản muốn lấy</param>
+        /// <returns>Mã chứng từ</returns>
+        /// Author: NVHThai (3/11/2022)
+        public string checkAssetIsActive(Guid assetID)
+        {
+            string connectionString = DataContext.MySqlConnectionString;
+            using (var mySqlConnection = new MySqlConnection(connectionString))
+            {
+                string storedProcedureName = "Proc_Asset_CheckAsset";
+                var parameters = new DynamicParameters();
+                parameters.Add("@$v_AssetID", assetID);
+                var licenseCode = mySqlConnection.QueryFirstOrDefault<string>(storedProcedureName, parameters, commandType: System.Data.CommandType.StoredProcedure);
+                return licenseCode;
+            }
+        }
+
+
+        /// <summary>
         /// Hàm tìm kiếm và phân trang
         /// </summary>
         /// <param name="keword">tìm kiếm theo mã tài sản và tên tài sản</param>
@@ -82,8 +102,8 @@ namespace MISA.Web08.QLTS.DL
                 var asset = multipleResults.Read<Assets>();
                 var totalCount = multipleResults.Read<int>().Single();
                 var quantity = multipleResults.Read<int>().Single();
-                var cost = multipleResults.Read<float>().Single();
-                var loss = multipleResults.Read<float>().Single();
+                var cost = multipleResults.Read<decimal>().Single();
+                var loss = multipleResults.Read<decimal>().Single();
 
                 return new PaggingData<Assets>()
                 {
@@ -339,6 +359,7 @@ namespace MISA.Web08.QLTS.DL
             return numberOfAffectedRows;
         }
 
+        
         #endregion
     }
 }

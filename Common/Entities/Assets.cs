@@ -69,7 +69,7 @@ namespace MISA.Web08.QLTS.Common.Entities
         /// </summary>
         [IsNotNullOrEmpty("Nguyên giá không được để trống")]
         [ExcelColumnName("Nguyên giá")]
-        public float? cost { get; set; }
+        public decimal? cost { get; set; }
 
         /// <summary>
         /// Số lượng
@@ -131,7 +131,7 @@ namespace MISA.Web08.QLTS.Common.Entities
         /// </summary>
         [IsNotNullOrEmpty("Giá trị hao mòn năm không được để trống")]
         [ExcelColumnName("Hao mòn/khấu hao lũy kế")]
-        public float? loss_year { get; set; }
+        public decimal? loss_year { get; set; }
 
 
         public string? budget { get; set; }

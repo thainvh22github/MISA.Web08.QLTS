@@ -111,5 +111,17 @@ namespace MISA.Web08.QLTS.BL
         {
             return _licenseDL.DeleteLicense(licenseID);
         }
+
+        /// <summary>
+        /// Xóa nhiều chứng từ bằng id chứng từ
+        /// </summary>
+        /// <param name="licenseList">Danh sách id của tài sản muốn xóa</param>
+        /// <returns>số cột bị ảnh hưởng</returns>
+        /// Author: NVHThai (26/10/2022)
+        public int DeleteMutipleLicense(List<string> licenseList)
+        {
+            return _licenseDL.DeleteMutipleLicense(licenseList);
+
+        }
     }
 }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MISA.Web08.QLTS.Common.Entities
 {
-    public class Funds
+    public class Budget
     {
         [PrimaryKey]
         public Guid budget_id { get; set; }

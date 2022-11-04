@@ -24,8 +24,8 @@ builder.Services.AddSession(options =>
 
 builder.Services.AddScoped<IAssetBL, AssetBL>();
 builder.Services.AddScoped<IAssetDL, AssetDL>();
-builder.Services.AddScoped<IFundsDL, FundsDL>();
-builder.Services.AddScoped<IFundsBL, FundsBL>();
+builder.Services.AddScoped<IBudgetDL, BudgetDL>();
+builder.Services.AddScoped<IBudgetBL, BudgetBL>();
 
 builder.Services.AddScoped<IDepartmentDL, DepartmentDL>();
 builder.Services.AddScoped<IDepartmentBL, DepartmentBL>();
@@ -35,7 +35,7 @@ builder.Services.AddScoped<IAssetCategoryBL, AssetCategoryBL>();
 builder.Services.AddScoped<IAssetCategoryDL, AssetCategoryDL>();
 
 builder.Services.AddScoped<ILicenseBL, LicenseBL>();
-builder.Services.AddScoped<ILincenseDL, LicenseDL>();
+builder.Services.AddScoped<ILincenseDL, LicenseDL >();
 
 builder.Services.AddScoped(typeof(IBaseDL<>), typeof(BaseDL<>));
 builder.Services.AddScoped(typeof(IBaseBL<>), typeof(BaseBL<>));

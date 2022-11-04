@@ -21,6 +21,14 @@ namespace MISA.Web08.QLTS.DL
         public Assets GetAssetByID(Guid assetID);
 
         /// <summary>
+        /// Kiểm tra xem id tài sản này đã chứ từ bằng mã nào
+        /// </summary>
+        /// <param name="assetID">ID tài sản muốn lấy</param>
+        /// <returns>Mã chứng từ</returns>
+        /// Author: NVHThai (3/11/2022)
+        public string checkAssetIsActive(Guid assetID);
+
+        /// <summary>
         /// Hàm tìm kiếm và phân trang
         /// </summary>
         /// <param name="keword">tìm kiếm theo mã tài sản và tên tài sản</param>

@@ -27,12 +27,12 @@ namespace MISA.Web08.QLTS.Common.Entities
         /// <summary>
         /// Tổng nguyên giá
         /// </summary>
-        public float Cost { get; set; }
+        public decimal Cost { get; set; }
 
         /// <summary>
         /// Tổng giá trị còn lại
         /// </summary>
-        public float Loss { get; set; }
+        public decimal Loss { get; set; }
 
         #endregion
     }

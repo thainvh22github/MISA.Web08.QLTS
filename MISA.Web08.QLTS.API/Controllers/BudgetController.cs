@@ -8,19 +8,19 @@ using MISA.Web08.QLTS.Common.Resources;
 
 namespace MISA.Web08.QLTS.API.Controllers
 {
-    public class FundController : BaseController<Funds>
+    public class BudgetController : BaseController<Budget>
     {
         #region Field
 
-        private IFundsBL _fundBL;
+        private IBudgetBL _budgetBL;
 
         #endregion
 
         #region Contructor
 
-        public FundController(IFundsBL fundBL) : base(fundBL)
+        public BudgetController(IBudgetBL budgetBL) : base(budgetBL)
         {
-            _fundBL = fundBL;
+            _budgetBL = budgetBL;
         }
 
         #endregion

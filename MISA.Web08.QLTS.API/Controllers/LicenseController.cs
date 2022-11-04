@@ -342,5 +342,43 @@ namespace MISA.Web08.QLTS.API.Controllers
                     HttpContext.TraceIdentifier));
             }
         }
+
+        /// <summary>
+        /// Xóa nhiều chứng từ bằng id chứng từ
+        /// </summary>
+        /// <param name="licenseList">Danh sách id của tài sản muốn xóa</param>
+        /// <returns>số cột bị ảnh hưởng</returns>
+        /// Author: NVHThai (26/10/2022)
+        [HttpPost("batch-delete")]
+        public IActionResult DeleteLicenseMutil([FromBody] List<string> licenseList)
+        {
+            try
+            {
+                var numberOfAffectedRows = _licenseBL.DeleteMutipleLicense(licenseList);
+                if (numberOfAffectedRows > 0)
+                {
+                    return StatusCode(StatusCodes.Status200OK, licenseList);
+                }
+                else
+                {
+                    return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResult(
+                    AssetErrorCode.DeleteFailed,
+                    Resource.DevMsg_DeleteFailed,
+                    Resource.UseMsg_DeleteFailed,
+                    Resource.MoreInfo,
+                    HttpContext.TraceIdentifier));
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResult(
+                    AssetErrorCode.Exception,
+                    Resource.DevMsg_Exception,
+                    Resource.UseMsg_Exception,
+                    Resource.MoreInfo,
+                    HttpContext.TraceIdentifier));
+            }
+        }
     }
 }

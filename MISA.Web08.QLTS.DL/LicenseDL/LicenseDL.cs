@@ -4,6 +4,7 @@ using MISA.Web08.QLTS.Common.Resources;
 using MySqlConnector;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -42,13 +43,16 @@ namespace MISA.Web08.QLTS.DL
         /// Author: NVHThai (26/10/2022)
         public IEnumerable<Assets> GetListAssetByLicenseID(Guid? licenseID)
         {
+            
             string connectionString = DataContext.MySqlConnectionString;
             using (var mySqlConnection = new MySqlConnection(connectionString))
             {
+                 
                 string storedProcedureName = "Proc_ListAsset_GetByLicenseID";
                 var parameters = new DynamicParameters();
                 parameters.Add("@$v_Where", licenseID);
                 var listAsset = mySqlConnection.Query<Assets>(storedProcedureName, parameters, commandType: System.Data.CommandType.StoredProcedure);
+                   
                 return listAsset;
             }
         }
@@ -105,14 +109,14 @@ namespace MISA.Web08.QLTS.DL
 
                 var license = multipleResults.Read<License>();
                 var totalCount = multipleResults.Read<int>().Single();
-                var sum = multipleResults.Read<int>().Single();
+                var cost = multipleResults.Read<decimal>().Single();
 
                 return new PaggingData<License>()
                 {
                     Data = license.ToList(),
                     TotalCount = totalCount,
-                    Quantity = sum,
-                    Cost = 0,
+                    Quantity = 0,
+                    Cost = cost,
                     Loss = 0
                 };
             }
@@ -146,7 +150,7 @@ namespace MISA.Web08.QLTS.DL
                     whereConditions.Add($"fixed_asset_code LIKE '%{keword}%' OR fixed_asset_name LIKE '%{keword}%'");
                 }
                 whereConditions.Add($"active = 0");
-                
+
 
                 string whereClause = string.Join(" AND ", whereConditions);
                 parameters.Add("@$v_Where", whereClause);
@@ -156,8 +160,8 @@ namespace MISA.Web08.QLTS.DL
                 var asset = multipleResults.Read<Assets>();
                 var totalCount = multipleResults.Read<int>().Single();
                 var quantity = multipleResults.Read<int>().Single();
-                var cost = multipleResults.Read<float>().Single();
-                var loss = multipleResults.Read<float>().Single();
+                var cost = multipleResults.Read<decimal>().Single();
+                var loss = multipleResults.Read<decimal>().Single();
 
                 return new PaggingData<Assets>()
                 {
@@ -184,39 +188,75 @@ namespace MISA.Web08.QLTS.DL
             string connectionString = DataContext.MySqlConnectionString;
             using (var mySqlConnection = new MySqlConnection(connectionString))
             {
-                var storedProcedureNameLicense = "Proc_LicenseMaster_Insert";
-                var storedProcedureNameLicenseDetail = "Proc_LicenseDetail_Insert";
-                var parameterMaster = new DynamicParameters();
-
-                var licenseID = Guid.NewGuid();
-                parameterMaster.Add("$v_LicenseID", licenseID);
-                parameterMaster.Add("$v_LicenseCode", license.LicenseCode);
-                parameterMaster.Add("$v_LicenseDay", license.LicenseDay);
-                parameterMaster.Add("$v_WriteDay", license.WriteDay);
-                parameterMaster.Add("$v_TotalCost", license.TotalCost);
-                parameterMaster.Add("$v_Content", license.Content);
-                parameterMaster.Add("$v_CreateBy", "Nguyễn Vũ Hải Thái");
-                parameterMaster.Add("$v_CreateDate", DateTime.Now);
-                parameterMaster.Add("$v_ModifiedBy", "Nguyễn Vũ Hải Thái");
-                parameterMaster.Add("$v_ModifiedDate", DateTime.Now);
-                var numberOfAffectedRowsMaster = mySqlConnection.Execute(storedProcedureNameLicense, parameterMaster, commandType: System.Data.CommandType.StoredProcedure);
-
-                var parameterDetail = new DynamicParameters();
-
-                int count = license.listAssetID.Count;
-                if (count > 0)
+                int numberOfAffectedRowsDetail = 0;
+                int numberOfAffectedRowsMaster = 0;
+                //nếu như kết nối đang đóng thì tiến hành mở lại
+                if (mySqlConnection.State != ConnectionState.Open)
                 {
-                    for (int i = 0; i < count; i++)
+                    mySqlConnection.Open();
+                }
+                using (var transaction = mySqlConnection.BeginTransaction())
+                {
+                    try
                     {
-                        var licenseDetailID = Guid.NewGuid();
-                        parameterDetail.Add("$v_LicenseDetailID", licenseDetailID);
-                        parameterDetail.Add("$v_LicenseID", licenseID);
-                        parameterDetail.Add("$v_AssetID", license.listAssetID[i]);
-                        parameterDetail.Add("$v_CreateBy", "Nguyễn Vũ Hải Thái");
-                        parameterDetail.Add("$v_CreateDate", DateTime.Now);
-                        parameterDetail.Add("$v_ModifiedBy", "Nguyễn Vũ Hải Thái");
-                        parameterDetail.Add("$v_ModifiedDate", DateTime.Now);
-                        var numberOfAffectedRowsDetail = mySqlConnection.Execute(storedProcedureNameLicenseDetail, parameterDetail, commandType: System.Data.CommandType.StoredProcedure);
+                        var storedProcedureNameLicense = "Proc_LicenseMaster_Insert";
+                        var storedProcedureNameLicenseDetail = "Proc_LicenseDetail_Insert";
+                        var parameterMaster = new DynamicParameters();
+
+                        var licenseID = Guid.NewGuid();
+                        parameterMaster.Add("$v_LicenseID", licenseID);
+                        parameterMaster.Add("$v_LicenseCode", license.LicenseCode);
+                        parameterMaster.Add("$v_LicenseDay", license.LicenseDay);
+                        parameterMaster.Add("$v_WriteDay", license.WriteDay);
+                        parameterMaster.Add("$v_TotalCost", license.TotalCost);
+                        parameterMaster.Add("$v_Content", license.Content);
+                        parameterMaster.Add("$v_CreateBy", "Nguyễn Vũ Hải Thái");
+                        parameterMaster.Add("$v_CreateDate", DateTime.Now);
+                        parameterMaster.Add("$v_ModifiedBy", "Nguyễn Vũ Hải Thái");
+                        parameterMaster.Add("$v_ModifiedDate", DateTime.Now);
+                        numberOfAffectedRowsMaster = mySqlConnection.Execute(storedProcedureNameLicense, parameterMaster, transaction: transaction, commandType: System.Data.CommandType.StoredProcedure);
+
+                        var parameterDetail = new DynamicParameters();
+                        int count = license.listAssetID.Count;
+                        if (count > 0)
+                        {
+                            for (int i = 0; i < count; i++)
+                            {
+                                var licenseDetailID = Guid.NewGuid();
+                                parameterDetail.Add("$v_LicenseDetailID", licenseDetailID);
+                                parameterDetail.Add("$v_LicenseID", licenseID);
+                                parameterDetail.Add("$v_AssetID", license.listAssetID[i]);
+                                parameterDetail.Add("$v_CreateBy", "Nguyễn Vũ Hải Thái");
+                                parameterDetail.Add("$v_CreateDate", DateTime.Now);
+                                parameterDetail.Add("$v_ModifiedBy", "Nguyễn Vũ Hải Thái");
+                                parameterDetail.Add("$v_ModifiedDate", DateTime.Now);
+                                int number = mySqlConnection.Execute(storedProcedureNameLicenseDetail, parameterDetail, transaction: transaction, commandType: System.Data.CommandType.StoredProcedure);
+                                numberOfAffectedRowsDetail = numberOfAffectedRowsDetail + number;
+                            }
+                        }
+
+                        if (numberOfAffectedRowsMaster == 1 && numberOfAffectedRowsDetail == count)
+                        {
+                            transaction.Commit();
+                        }
+                        else
+                        {
+                            numberOfAffectedRowsMaster = 0;
+                            numberOfAffectedRowsDetail = 0;
+                            transaction.Rollback();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex);
+                        //nếu thực hiện không thành công thì rollback
+                        transaction.Rollback();
+                        numberOfAffectedRowsMaster = 0;
+                        numberOfAffectedRowsDetail = 0;
+                    }
+                    finally
+                    {
+                        mySqlConnection.Close();
                     }
                 }
                 return numberOfAffectedRowsMaster;
@@ -232,46 +272,86 @@ namespace MISA.Web08.QLTS.DL
         /// Author: NVHThai (26/10/2022)
         public int UpdateLicense(Guid licenseID, License license)
         {
+            int numberOfAffectedRowsMaster = 0;
+            int numberOfAffectedRows = 0;
+            int numberOfAffectedRowsDetail = 0;
             string connectionString = DataContext.MySqlConnectionString;
             using (var mySqlConnection = new MySqlConnection(connectionString))
             {
-                var storedProcedureNameLicense = "Proc_LicenseMaster_EditByID"; 
-                var storedProcedureNameLicenseDetailDelete = "Proc_LicenseDetail_DeleteByIDLicenseDetail";
-                var storedProcedureNameLicenseDetail = "Proc_LicenseDetail_Insert"; 
-
-                var parameterMaster = new DynamicParameters();
-                parameterMaster.Add("$v_LicenseID", licenseID);
-                parameterMaster.Add("$v_LicenseCode", license.LicenseCode);
-                parameterMaster.Add("$v_LicenseDay", license.LicenseDay);
-                parameterMaster.Add("$v_WriteDay", license.WriteDay);
-                parameterMaster.Add("$v_TotalCost", license.TotalCost);
-                parameterMaster.Add("$v_Content", license.Content);
-                parameterMaster.Add("$v_ModifiedBy", "Nguyễn Vũ Hải Thái");
-                parameterMaster.Add("$v_ModifiedDate", DateTime.Now);
-                var numberOfAffectedRowsMaster = mySqlConnection.Execute(storedProcedureNameLicense, parameterMaster, commandType: System.Data.CommandType.StoredProcedure);
-
-                var parameterLicenseDetailDelete = new DynamicParameters();
-                parameterLicenseDetailDelete.Add("@$v_Where", licenseID);
-                int numberOfAffectedRows = mySqlConnection.Execute(storedProcedureNameLicenseDetailDelete, parameterLicenseDetailDelete, commandType: System.Data.CommandType.StoredProcedure);
-
-                var parameterDetail = new DynamicParameters();
-                int count = license.listAssetID.Count;
-                if (count > 0)
+                //nếu như kết nối đang đóng thì tiến hành mở lại
+                if (mySqlConnection.State != ConnectionState.Open)
                 {
-                    for (int i = 0; i < count; i++)
+                    mySqlConnection.Open();
+                }
+                using (var transaction = mySqlConnection.BeginTransaction())
+                {
+                    try
                     {
-                        var licenseDetailID = Guid.NewGuid();
-                        parameterDetail.Add("$v_LicenseDetailID", licenseDetailID);
-                        parameterDetail.Add("$v_LicenseID", licenseID);
-                        parameterDetail.Add("$v_AssetID", license.listAssetID[i]);
-                        parameterDetail.Add("$v_CreateBy", "Nguyễn Vũ Hải Thái");
-                        parameterDetail.Add("$v_CreateDate", DateTime.Now);
-                        parameterDetail.Add("$v_ModifiedBy", "Nguyễn Vũ Hải Thái");
-                        parameterDetail.Add("$v_ModifiedDate", DateTime.Now);
-                        var numberOfAffectedRowsDetail = mySqlConnection.Execute(storedProcedureNameLicenseDetail, parameterDetail, commandType: System.Data.CommandType.StoredProcedure);
+                        string storedProcedureNameLicense = "Proc_LicenseMaster_EditByID";
+                        string storedProcedureNameLicenseDetailDelete = "Proc_LicenseDetail_DeleteByIDLicenseDetail";
+                        string storedProcedureNameLicenseDetail = "Proc_LicenseDetail_Insert";
+
+                        var parameterMaster = new DynamicParameters();
+                        parameterMaster.Add("$v_LicenseID", licenseID);
+                        parameterMaster.Add("$v_LicenseCode", license.LicenseCode);
+                        parameterMaster.Add("$v_LicenseDay", license.LicenseDay);
+                        parameterMaster.Add("$v_WriteDay", license.WriteDay);
+                        parameterMaster.Add("$v_TotalCost", license.TotalCost);
+                        parameterMaster.Add("$v_Content", license.Content);
+                        parameterMaster.Add("$v_ModifiedBy", "Nguyễn Vũ Hải Thái");
+                        parameterMaster.Add("$v_ModifiedDate", DateTime.Now);
+                        numberOfAffectedRowsMaster = mySqlConnection.Execute(storedProcedureNameLicense, parameterMaster, transaction: transaction, commandType: System.Data.CommandType.StoredProcedure);
+
+                        var parameterLicenseDetailDelete = new DynamicParameters();
+                        parameterLicenseDetailDelete.Add("@$v_Where", licenseID);
+                        numberOfAffectedRows = mySqlConnection.Execute(storedProcedureNameLicenseDetailDelete, parameterLicenseDetailDelete, transaction: transaction, commandType: System.Data.CommandType.StoredProcedure);
+
+                        var parameterDetail = new DynamicParameters();
+                        int count = license.listAssetID.Count;
+                        if (count > 0)
+                        {
+                            for (int i = 0; i < count; i++)
+                            {
+                                var licenseDetailID = Guid.NewGuid();
+                                parameterDetail.Add("$v_LicenseDetailID", licenseDetailID);
+                                parameterDetail.Add("$v_LicenseID", licenseID);
+                                parameterDetail.Add("$v_AssetID", license.listAssetID[i]);
+                                parameterDetail.Add("$v_CreateBy", "Nguyễn Vũ Hải Thái");
+                                parameterDetail.Add("$v_CreateDate", DateTime.Now);
+                                parameterDetail.Add("$v_ModifiedBy", "Nguyễn Vũ Hải Thái");
+                                parameterDetail.Add("$v_ModifiedDate", DateTime.Now);
+                                int number = mySqlConnection.Execute(storedProcedureNameLicenseDetail, parameterDetail, transaction: transaction, commandType: System.Data.CommandType.StoredProcedure);
+                                numberOfAffectedRowsDetail = numberOfAffectedRowsDetail + number;
+                            }
+                        }
+                        if (numberOfAffectedRowsMaster == 1 && numberOfAffectedRows > 0 && numberOfAffectedRowsDetail == count)
+                        {
+                            transaction.Commit();
+                        }
+                        else
+                        {
+
+                            numberOfAffectedRowsMaster = 0;
+                            numberOfAffectedRows = 0;
+                            numberOfAffectedRowsDetail = 0;
+                            transaction.Rollback();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex);
+                        //nếu thực hiện không thành công thì rollback
+                        transaction.Rollback();
+                        numberOfAffectedRowsMaster = 0;
+                        numberOfAffectedRows = 0;
+                        numberOfAffectedRowsDetail = 0;
+                    }
+                    finally
+                    {
+                        mySqlConnection.Close();
                     }
                 }
-                return numberOfAffectedRowsMaster + numberOfAffectedRows;
+                return numberOfAffectedRowsMaster;
             }
         }
 
@@ -283,20 +363,121 @@ namespace MISA.Web08.QLTS.DL
         /// Author: NVHThai (26/10/2022)
         public int DeleteLicense(Guid licenseID)
         {
+            int numberOfAffectedRowsDetail = 0;
+            int numberOfAffectedRows = 0;
             string connectionString = DataContext.MySqlConnectionString;
             using (var mySqlConnection = new MySqlConnection(connectionString))
             {
-                string storedProcedureName = "Proc_LicenseMaster_Delete";
+                //nếu như kết nối đang đóng thì tiến hành mở lại
+                if (mySqlConnection.State != ConnectionState.Open)
+                {
+                    mySqlConnection.Open();
+                }
+                using (var transaction = mySqlConnection.BeginTransaction())
+                {
+                    try
+                    {
+                        string storedProcedureName = "Proc_LicenseMaster_Delete";
+                        string storedProcedureNameLicenseDetailDelete = "Proc_LicenseDetail_DeleteByIDLicenseDetail";
 
-                var parameters = new DynamicParameters();
-                parameters.Add("@$v_Where", licenseID);
+                        var parameters = new DynamicParameters();
+                        var parameterLicenseDetailDelete = new DynamicParameters();
 
-                int numberOfAffectedRows = mySqlConnection.Execute(storedProcedureName, parameters, commandType: System.Data.CommandType.StoredProcedure);
+                        parameters.Add("@$v_Where", licenseID);
+                        numberOfAffectedRowsDetail = mySqlConnection.Execute(storedProcedureNameLicenseDetailDelete, parameters, transaction: transaction, commandType: System.Data.CommandType.StoredProcedure);
+                        numberOfAffectedRows = mySqlConnection.Execute(storedProcedureName, parameters, transaction: transaction, commandType: System.Data.CommandType.StoredProcedure);
 
+                        if (numberOfAffectedRowsDetail > 0 && numberOfAffectedRows == 1)
+                        {
+                            transaction.Commit();
+                        }
+                        else
+                        {
+                            numberOfAffectedRows = 0;
+                            numberOfAffectedRowsDetail = 0;
+                            transaction.Rollback();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex);
+                        //nếu thực hiện không thành công thì rollback
+                        transaction.Rollback();
+                        numberOfAffectedRows = 0;
+                        numberOfAffectedRowsDetail = 0;
+                    }
+                    finally
+                    {
+                        mySqlConnection.Close();
+                    }
+                }
                 return numberOfAffectedRows;
             }
 
         }
 
+        /// <summary>
+        /// Xóa nhiều chứng từ bằng id chứng từ
+        /// </summary>
+        /// <param name="assetIDs">Danh sách id của tài sản muốn xóa</param>
+        /// <returns>số cột bị ảnh hưởng</returns>
+        /// Author: NVHThai (26/10/2022)
+        public int DeleteMutipleLicense(List<string> licenseList)
+        {
+            int numberOfAffectedRows = 0;
+            int numberOfAffectedRowsDetail = 0;
+
+            string connectionString = DataContext.MySqlConnectionString;
+            using (var mySqlConnection = new MySqlConnection(connectionString))
+            {
+                //nếu như kết nối đang đóng thì tiến hành mở lại
+                if (mySqlConnection.State != ConnectionState.Open)
+                {
+                    mySqlConnection.Open();
+                }
+                using (var transaction = mySqlConnection.BeginTransaction())
+                {
+                    try
+                    {
+                        string storedProcedureNameLicenseDetailDelete = "Proc_LicenseDetail_DeleteByIDLicenseDetail";
+                        string storedProcedureName = "Proc_LicenseMaster_Delete";
+                        var parameters = new DynamicParameters();
+                        var parametersDetail = new DynamicParameters();
+
+                        for (int i = 0; i < licenseList.Count; i++)
+                        {
+                            parametersDetail.Add("@$v_Where", licenseList[i]);
+                            int numberDetail = mySqlConnection.Execute(storedProcedureNameLicenseDetailDelete, parametersDetail, transaction: transaction, commandType: System.Data.CommandType.StoredProcedure);
+                            numberOfAffectedRowsDetail = numberOfAffectedRowsDetail + numberDetail;
+
+                            parameters.Add("@$v_Where", licenseList[i]);
+                            int number = mySqlConnection.Execute(storedProcedureName, parameters, transaction: transaction, commandType: System.Data.CommandType.StoredProcedure);
+                            numberOfAffectedRows = numberOfAffectedRows + number;
+                        }
+
+                        if (numberOfAffectedRows > 0 && numberOfAffectedRowsDetail > 0)
+                        {
+                            transaction.Commit();
+                        }
+                        else
+                        {
+                            numberOfAffectedRows = 0;
+                            transaction.Rollback();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex);
+                        numberOfAffectedRows = 0;
+                        transaction.Rollback();
+                    }
+                    finally
+                    {
+                        mySqlConnection.Close();
+                    }
+                }
+                return numberOfAffectedRows;
+            }
+        }
     }
 }

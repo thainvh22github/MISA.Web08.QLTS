@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MISA.Web08.QLTS.BL
 {
-    public interface IFundsBL : IBaseBL<Funds> { }
+    public interface IBudgetBL : IBaseBL<Budget> { }
 
 
 }

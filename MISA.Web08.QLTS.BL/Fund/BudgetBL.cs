@@ -8,19 +8,19 @@ using System.Threading.Tasks;
 
 namespace MISA.Web08.QLTS.BL
 {
-    public class FundsBL : BaseBL<Funds>, IFundsBL
+    public class BudgetBL : BaseBL<Budget>, IBudgetBL
     {
         #region Field,
 
-        private IFundsDL _fundDL;
+        private IBudgetDL _budgetDL;
 
         #endregion
 
         #region Contructor
 
-        public FundsBL(IFundsDL fundDL) : base(fundDL)
+        public BudgetBL(IBudgetDL budgetDL) : base(budgetDL)
         {
-            _fundDL = fundDL;
+            _budgetDL = budgetDL;
         }
         #endregion
     }

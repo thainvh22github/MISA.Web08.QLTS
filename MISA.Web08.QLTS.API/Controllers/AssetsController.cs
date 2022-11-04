@@ -72,6 +72,46 @@ namespace MISA.Web08.QLTS.API
             }
         }
 
+        /// <summary>
+        /// Kiểm tra xem id tài sản này đã chứ từ bằng mã nào
+        /// </summary>
+        /// <param name="assetID">ID tài sản muốn lấy</param>
+        /// <returns>Mã chứng từ</returns>
+        /// Author: NVHThai (3/11/2022)
+        [HttpGet]
+        [Route("check-active/{assetID}")]
+        public IActionResult checkAssetIsActive([FromRoute] Guid assetID)
+        {
+            try
+            {
+                var licenseCode = _assetBL.checkAssetIsActive(assetID);
+
+                if (licenseCode != null)
+                {
+                    return StatusCode(StatusCodes.Status200OK, licenseCode);
+                }
+                else
+                {
+                    return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResult(
+                    AssetErrorCode.GetFailed,
+                    Resource.DevMsg_GetFailed,
+                    Resource.UseMsg_GetFailed,
+                    Resource.MoreInfo,
+                    HttpContext.TraceIdentifier));
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResult(
+                    AssetErrorCode.Exception,
+                    Resource.DevMsg_Exception,
+                    Resource.DevMsg_Exception,
+                    Resource.MoreInfo,
+                    HttpContext.TraceIdentifier));
+            }
+        }
+
 
         /// <summary>
         /// Hàm tìm kiếm và phân trang
@@ -170,7 +210,6 @@ namespace MISA.Web08.QLTS.API
         [HttpPost]
         public IActionResult InsertAsset([FromBody] Assets asset)
         {
-
             try
             {
                 var insertData = _assetBL.InsertAsset(asset);

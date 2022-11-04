@@ -39,7 +39,7 @@ namespace MISA.Web08.QLTS.BL
         {
             var validateFailures = new List<string>();
 
-            if (asset.loss_year > asset.cost)
+            if ((decimal)asset.loss_year > asset.cost)
             {
                 validateFailures.Add(Resource.validateDetailLossYear);
             }
@@ -130,6 +130,17 @@ namespace MISA.Web08.QLTS.BL
         public Assets GetAssetByID(Guid assetID)
         {
             return _assetDL.GetAssetByID(assetID);
+        }
+
+        /// <summary>
+        /// Kiểm tra xem id tài sản này đã chứ từ bằng mã nào
+        /// </summary>
+        /// <param name="assetID">ID tài sản muốn lấy</param>
+        /// <returns>Mã chứng từ</returns>
+        /// Author: NVHThai (3/11/2022)
+        public string checkAssetIsActive(Guid assetID)
+        {
+            return _assetDL.checkAssetIsActive(assetID);
         }
 
         /// <summary>
@@ -294,6 +305,6 @@ namespace MISA.Web08.QLTS.BL
         {
             return _assetDL.DeleteMutipleAssets(assetList);
         }
-
+       
     }
 }
